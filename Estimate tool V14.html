@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Junior's Pro Finish - Estimate Tool V12</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .calculator-container {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 30px;
+      max-width: 450px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 24px;
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    h2 {
+      font-size: 16px;
+      color: #7f8c8d;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 25px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+      color: #34495e;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 18px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+    .results-card {
+      background-color: #ecf0f1;
+      border-left: 5px solid #3498db;
+      padding: 20px;
+      border-radius: 6px;
+    }
+    .results-card h3 {
+      margin-top: 0;
+      font-size: 20px;
+      color: #2980b9;
+      border-bottom: 1px solid #bdc3c7;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    .result-row span.val {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator-container">
+    <h1>Junior's Pro Finish</h1>
+    <h2>Drywall & Materials Estimator</h2>
+
+    <label for="sqFtInput">Total Drywall Area (Sq Ft):</label>
+    <!-- As you type in this box, the calculateEstimate function runs automatically -->
+    <input type="number" id="sqFtInput" placeholder="e.g., 1200" oninput="calculateEstimate()">
+
+    <div class="results-card">
+      <h3>Materials Needed</h3>
+      
+      <div class="result-row">
+        <span>Drywall Sheets (4x8):</span>
+        <span class="val" id="sheetsResult">0</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Joint Compound (4.5 gal / 60 lb):</span>
+        <span class="val" id="mudResult">0 buckets</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Drywall Tape (250 ft roll):</span>
+        <span class="val" id="tapeResult">0 rolls</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Drywall Screws (1-¼"):</span>
+        <span class="val" id="screwsResult">0 lbs</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateEstimate() {
+      // 1. Get the square footage entered by the user
+      const sqFt = parseFloat(document.getElementById('sqFtInput').value);
+
+      // 2. If the box is empty, show zeros
+      if (isNaN(sqFt) || sqFt <= 0) {
+        document.getElementById('sheetsResult').innerText = "0";
+        document.getElementById('mudResult').innerText = "0 buckets";
+        document.getElementById('tapeResult').innerText = "0 rolls";
+        document.getElementById('screwsResult').innerText = "0 lbs";
+        return;
+      }
+
+      // 3. Calculate materials (rounding up to the nearest whole number)
+      const sheets = Math.ceil(sqFt / 32);                          // 32 sq ft per 4x8 sheet
+      const mudBuckets = Math.ceil(sqFt / 400);                     // 1 bucket covers ~400 sq ft
+      const tapeRolls = Math.ceil((sqFt * 0.37) / 250);             // 370 ft of tape per 1000 sq ft, divided by a 250 ft roll
+      const screwLbs = Math.ceil(sqFt / 200);                       // 1 lb of screws covers ~200 sq ft
+
+      // 4. Send the calculated numbers to the screen
+      document.getElementById('sheetsResult').innerText = sheets;
+      document.getElementById('mudResult').innerText = mudBuckets + (mudBuckets === 1 ? " bucket" : " buckets");
+      document.getElementById('tapeResult').innerText = tapeRolls + (tapeRolls === 1 ? " roll" : " rolls");
+      document.getElementById('screwsResult').innerText = screwLbs + " lbs";
+    }
+  </script>
+
+</body>
+</html>
